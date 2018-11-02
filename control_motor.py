@@ -1,20 +1,28 @@
 import RPi.GPIO as GPIO
 import time
-GPIO.setmode(GPIO.BOARD)
+
+#variables to determine rotation
+#1 clockwise, 0 counterclockwise
+direction=1
+FracOfRotToTurn=0.25
+
+#pin number (not GPIO number)
 stepPin=31
 directionPin=33
+
+GPIO.setmode(GPIO.BOARD)
 GPIO.setup(stepPin, GPIO.OUT)
 GPIO.setup(directionPin, GPIO.OUT)
 GPIO.output(stepPin, 0)
-GPIO.output(directionPin, 0)
+GPIO.output(directionPin, direction)
 
 stepsInRot=200
-amountToTurn=0.25
-numSteps=round(stepsInRot*amountToTurn)
+numSteps=int(round(stepsInRot*FracOfRotToTurn))
 
+timeStep=0.001
 for i in range(numSteps):
   GPIO.output(stepPin, 1)
-  time.sleep(0.001)
+  time.sleep(timeStep)
   GPIO.output(stepPin, 0)
-  time.sleep(0.001)
+  time.sleep(timeStep)
 GPIO.cleanup()

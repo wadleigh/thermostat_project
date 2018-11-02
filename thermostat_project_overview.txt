@@ -1,0 +1,22 @@
+Thermostat Project Overview
+
+Done:
+- read in temperature 
+- control motor
+
+To do:
+- log temperature
+- set desired temperature 
+- adjust motor accordingly
+- build thing to attach motor to heater
+
+
+Extras:
+- log in weather data
+- adjust setting based on weather, not just temperature 
+- figure out a sleep mode so it's not running all the time (an presumably using maybe significant energy)
+- make a schedule of what temperatures it should be at what time
+- figure out how to control it remotely
+- learn how to most efficiently adjust the temperature
+- and a motor and thermometer in the bedroom attached to something, maybe the ESP8266 wifi thing, and control the temp in there also with the pi.  This: https://maker.pro/esp8266/tutorial/how-to-program-esp8266s-onboard-gpio-pins could be helpful
+
