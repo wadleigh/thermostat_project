@@ -1,23 +1,20 @@
 import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BOARD)
-control_pins = [31,33]
-for pin in control_pins:
-  GPIO.setup(pin, GPIO.OUT)
-  GPIO.output(pin, 0)
-halfstep_seq = [
-  [1,0,0,0],
-  [1,1,0,0],
-  [0,1,0,0],
-  [0,1,1,0],
-  [0,0,1,0],
-  [0,0,1,1],
-  [0,0,0,1],
-  [1,0,0,1]
-]
-for i in range(20):
-  for halfstep in range(8):
-    for pin in range(2):
-      GPIO.output(control_pins[pin], halfstep_seq[halfstep][pin])
-    time.sleep(0.001)
+stepPin=31
+directionPin=33
+GPIO.setup(stepPin, GPIO.OUT)
+GPIO.setup(directionPin, GPIO.OUT)
+GPIO.output(stepPin, 0)
+GPIO.output(directionPin, 0)
+
+stepsInRot=200
+amountToTurn=0.25
+numSteps=round(stepsInRot*amountToTurn)
+
+for i in range(numSteps):
+  GPIO.output(stepPin, 1)
+  time.sleep(0.001)
+  GPIO.output(stepPin, 0)
+  time.sleep(0.001)
 GPIO.cleanup()
