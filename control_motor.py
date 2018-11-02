@@ -3,7 +3,7 @@ import time
 
 #variables to determine rotation
 #1 clockwise, 0 counterclockwise
-direction = 1
+direction = 0
 FracOfRotToTurn = 0.25
 
 #pin number (not GPIO number)
