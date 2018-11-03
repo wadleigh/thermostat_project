@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # now with 100% more git
 
 import Adafruit_DHT
