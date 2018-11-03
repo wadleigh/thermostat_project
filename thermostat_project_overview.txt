@@ -1,5 +1,16 @@
 Thermostat Project Overview
 
+Notes:
+- run as nohup ./read_and_log_temp.py (or what ever the file name is) the nohup makes it run even if the terminal window or SSH connection gets closed.
+- to kill the program: 
+	- type: ps -e | grep python3 (this finds the python3 task that is running)
+	- "ps -ef" lists all task that are running "|" passes that list to "grep" which searches the list for "python3", the program that is running (which is running the program I wrote)
+	- this returns program ID (a number, that seems to be four digits fairly often), as the first thing, and also other stuff
+	- the type: kill (the number returned as the programID from the last command)
+
+
+
+
 Done:
 - read in temperature 
 - control motor
