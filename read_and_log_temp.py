@@ -13,7 +13,7 @@ pin = 7
 
 numPoints = 5
 extraTimeBetweenPoints = 1
-timeBetweenReadings=60*10
+timeBetweenReadings=60*1
 
 filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 
