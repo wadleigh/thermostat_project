@@ -13,39 +13,35 @@ pin = 7
 
 numPoints = 5
 extraTimeBetweenPoints = 1
+timeBetweenReadings=60*2
 
 filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 
+while True:
+	tempList = []
+	humList = []
+	#Doesn't save the first reading (it seems to be wrong most of the time)
+	for i in range(numPoints+1):
+		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
+		#curTime = time.asctime( time.localtime(time.time()) )
+		curTime = datetime.datetime.now()
+		if i > 0:
+			tempList.append(temperature)
+			humList.append(humidity)
+		time.sleep(extraTimeBetweenPoints)
 
-#while True:
-tempList = []
-humList = []
-#Doesn't save the first reading (it seems to be wrong most of the time)
-for i in range(numPoints+1):
-	humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-	#curTime = time.asctime( time.localtime(time.time()) )
-	curTime = datetime.datetime.now()
-	if i > 0:
-		tempList.append(temperature)
-		humList.append(humidity)
-	time.sleep(extraTimeBetweenPoints)
+	# Convert the temperature to Fahrenheit.
+	tempAve = sum(tempList) / len(tempList)  * 9/5.0 + 32
+	humAve = sum(humList) / len(humList)
 
-# Convert the temperature to Fahrenheit.
-tempAve = sum(tempList) / len(tempList)  * 9/5.0 + 32
-humAve = sum(humList) / len(humList)
+	lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f} \n'.format(curTime, tempAve, humAve)
 
-lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f} \n'.format(curTime, tempAve, humAve)
+	with filename.open(mode = 'a') as log:
+		log.write(lineToWrite)
 
-with filename.open(mode = 'a') as log:
-	log.write(lineToWrite)
-	
-#with open(filename,"a") as log:
-#	log.write(lineToWrite)
+	print(lineToWrite)
 
-print(lineToWrite)
-# Convert the temperature to Fahrenheit.
-#temperature = temperature * 9/5.0 + 32
-
+	time.sleep(timeBetweenReadings)
 # Note that sometimes you won't get a reading and
 # the results will be null (because Linux can't
 # guarantee the timing of calls to read the sensor).
