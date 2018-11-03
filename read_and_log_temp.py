@@ -34,7 +34,7 @@ for i in range(numPoints+1):
 tempAve = sum(tempList) / len(tempList)  * 9/5.0 + 32
 humAve = sum(humList) / len(humList)
 
-lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {0:0.1f}, {1:0.1f} \n'.format(curTime,tempAve, humAve)
+lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f} \n'.format(curTime, tempAve, humAve)
 
 with filename.open(mode = 'a') as log:
 	log.write(lineToWrite)
