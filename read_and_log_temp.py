@@ -1,8 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # now with 100% more git
 
 import Adafruit_DHT
 import time
+import datetime
+from pathlib import Path
 
 # Try to grab a sensor reading.  Use the read_retry method which will retry up
 # to 15 times to get a sensor reading (waiting 2 seconds between each retry).
@@ -10,7 +12,9 @@ sensor = Adafruit_DHT.DHT22
 pin = 7
 
 numPoints = 5
-timeBetweenPoints = 3
+extraTimeBetweenPoints = 1
+
+filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 
 
 #while True:
@@ -19,17 +23,26 @@ humList = []
 #Doesn't save the first reading (it seems to be wrong most of the time)
 for i in range(numPoints+1):
 	humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
-	curTime = time.asctime( time.localtime(time.time()) )
+	#curTime = time.asctime( time.localtime(time.time()) )
+	curTime = datetime.datetime.now()
 	if i > 0:
-		tempList = tempList.append(temperature)
-		humList = humList.append(humidity)
-	time.sleep(timeBetweenPoints)
+		tempList.append(temperature)
+		humList.append(humidity)
+	time.sleep(extraTimeBetweenPoints)
 
 # Convert the temperature to Fahrenheit.
 tempAve = sum(tempList) / len(tempList)  * 9/5.0 + 32
 humAve = sum(humList) / len(humList)
 
-print('Temp={0:0.1f}*  Humidity={1:0.1f}%'.format(temperature, humidity))
+lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {0:0.1f}, {1:0.1f} \n'.format(curTime,tempAve, humAve)
+
+with filename.open(mode = 'a') as log:
+	log.write(lineToWrite)
+	
+#with open(filename,"a") as log:
+#	log.write(lineToWrite)
+
+print(lineToWrite)
 # Convert the temperature to Fahrenheit.
 #temperature = temperature * 9/5.0 + 32
 
