@@ -3,7 +3,8 @@ import RPi.GPIO as GPIO
 import time
 
 #variables to determine rotation
-#1 clockwise, 0 counterclockwise
+#1 clockwise, 0 counterclockwise (when looking at motor, dial on heater is reversed)
+# 0 turns up temp, 1 turns down temp
 direction = 0
 FracOfRotToTurn = 0.25
 
