@@ -72,7 +72,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 
 
 def main():
-	targetTemp = 68
+	targetTemp = 66
 	withinAmount = 0.5
 	numPoints = 10
 	extraTimeBetweenPoints = 1
