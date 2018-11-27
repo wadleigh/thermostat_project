@@ -50,7 +50,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	hitExtrema = 0
 
 	targetPos = curPos + signOfDirection * FracOfRotToTurn
-	if targetPos > maxPos :
+	if targetPos > maxPos:
 	  hitExtrema = 1
 	  targetPos = maxPos
 	elif targetPos < minPos:
@@ -100,12 +100,12 @@ def main():
 
 			time.sleep(timeBetweenReadings)
 
-		if tempAve < (targetTemp - withinAmount) 
+		if tempAve < (targetTemp - withinAmount): 
 			#increase temp
 			direction = 0
 			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
 			
-		elif tempAve > (targetTemp + withinAmount)
+		elif tempAve > (targetTemp + withinAmount):
 			#decrease temp
 			direction = 1
 			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
