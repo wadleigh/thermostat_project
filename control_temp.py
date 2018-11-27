@@ -17,7 +17,6 @@ def read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings):
 		# to 15 times to get a sensor reading (waiting 2 seconds between each retry).
 		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 		#curTime = time.asctime( time.localtime(time.time()) )
-		curTime = datetime.datetime.now()
 		if i > 0:
 			tempList.append(temperature)
 			humList.append(humidity)
@@ -91,6 +90,7 @@ def main():
 	while True:
 		for i in range(readingsBetweenAdjustment):
 			tempAve, humAve = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings)
+			curTime = datetime.datetime.now()
 			lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f}, {3:0.2f} \n'.format(curTime, tempAve, humAve, curPos)
 
 			with filename.open(mode = 'a') as log:
