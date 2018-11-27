@@ -81,8 +81,12 @@ def main():
 	readingsBetweenAdjustment = 10
 	filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 
-	curPos = 0
-	FracOfRotToTurn = 0.1 
+	curPos = 0 #starting position of knob
+	setPos = 0.5 #Position to turn to knob too initially
+	#increase temp
+	direction = 0
+	curPos, hitExtrema = control_motor(curPos, direction, setPos)
+	FracOfRotToTurn = 0.02 
 
 	while True:
 		for i in range(readingsBetweenAdjustment):
