@@ -7,6 +7,11 @@ Notes:
 	- "ps -ef" lists all task that are running "|" passes that list to "grep" which searches the list for "python3", the program that is running (which is running the program I wrote)
 	- this returns program ID (a number, that seems to be four digits fairly often), as the first thing, and also other stuff
 	- the type: kill (the number returned as the programID from the last command)
+- to sync the code over to the pi 
+	- type " ./syncTo.py" in the command line in the Dev/thermostat_project/ folder on my computer
+	- The command line should read: 
+	"Running this command: rsync -a --delete ./ pi@raspi:~/Dev/thermostat_project/
+	Lauras-MacBook-Pro:thermostat_project laurawadleigh$ ./syncTo.py "
 
 
 
