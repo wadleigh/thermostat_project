@@ -70,9 +70,13 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	GPIO.cleanup()
 	return targetPos, hitExtrema
 
+def read_set_temp(set_temp_file_name):
+	with open('set_temp.csv') as setTempFile:
+		setTemp = float(setTempFile.read())
+	setTempFile.closed
+	return setTemp
 
 def main():
-	targetTemp = 66
 	withinAmount = 0.5
 	numPoints = 10
 	extraTimeBetweenPoints = 1
@@ -80,10 +84,12 @@ def main():
 	readingsBetweenAdjustment = 10
 	filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 
+	set_temp_file_name = 'set_temp.csv'
+	targetTemp = read_set_temp(set_temp_file_name)
+
 	curPos = 0 #starting position of knob
-	setPos = 0.5 #Position to turn to knob too initially
-	#increase temp
-	direction = 0
+	setPos = 0.68 #Amount to turn knob initially
+	direction = 0 #increase temp
 	curPos, hitExtrema = control_motor(curPos, direction, setPos)
 	FracOfRotToTurn = 0.02 
 
@@ -91,7 +97,7 @@ def main():
 		for i in range(readingsBetweenAdjustment):
 			tempAve, humAve = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings)
 			curTime = datetime.datetime.now()
-			lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f}, {3:0.2f} \n'.format(curTime, tempAve, humAve, curPos)
+			lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f}, {3:0.2f}, {4:0.2f} \n'.format(curTime, tempAve, humAve, curPos, targetTemp)
 
 			with filename.open(mode = 'a') as log:
 				log.write(lineToWrite)
