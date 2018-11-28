@@ -85,9 +85,9 @@ def main():
 	filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 	set_temp_file_name = 'set_temp.csv'
 	
-
-	curPos = 0 #starting position of knob
-	setPos = 0.68 #Amount to turn knob initially
+	targetTemp = read_set_temp(set_temp_file_name)
+	curPos = 0.66 #starting position of knob
+	setPos = 0 #Amount to turn knob initially
 	direction = 0 #increase temp
 	curPos, hitExtrema = control_motor(curPos, direction, setPos)
 	FracOfRotToTurn = 0.02 
@@ -106,7 +106,7 @@ def main():
 			time.sleep(timeBetweenReadings)
 
 		targetTemp = read_set_temp(set_temp_file_name)
-		
+
 		if tempAve < (targetTemp - withinAmount): 
 			#increase temp
 			direction = 0
