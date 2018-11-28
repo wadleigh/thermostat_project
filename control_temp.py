@@ -83,9 +83,8 @@ def main():
 	timeBetweenReadings = 60*1
 	readingsBetweenAdjustment = 10
 	filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
-
 	set_temp_file_name = 'set_temp.csv'
-	targetTemp = read_set_temp(set_temp_file_name)
+	
 
 	curPos = 0 #starting position of knob
 	setPos = 0.68 #Amount to turn knob initially
@@ -106,6 +105,8 @@ def main():
 
 			time.sleep(timeBetweenReadings)
 
+		targetTemp = read_set_temp(set_temp_file_name)
+		
 		if tempAve < (targetTemp - withinAmount): 
 			#increase temp
 			direction = 0
