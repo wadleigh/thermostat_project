@@ -7,6 +7,7 @@ from pathlib import Path
 import RPi.GPIO as GPIO
 
 def read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings):
+	""" Read in the temperature and humidity data from the sensor """
 	sensor = Adafruit_DHT.DHT22
 	pin = 7
 	tempList = []
@@ -29,6 +30,7 @@ def read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings):
 
 
 def control_motor(curPos, direction, FracOfRotToTurn):
+	""" Control the motor.  Assume the position starts at "curPos". """
 	#variables to determine rotation
 	#1 clockwise, 0 counterclockwise (when looking at motor, dial on heater is reversed)
 	# zero turns up temp, 1 turns down temp
@@ -71,6 +73,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	return targetPos, hitExtrema
 
 def read_set_temp(set_temp_file_name):
+	""" read the set point tempurature in from a file """
 	with open('set_temp.csv') as setTempFile:
 		setTemp = float(setTempFile.read())
 	setTempFile.closed
@@ -107,7 +110,7 @@ def main():
 
 		targetTemp = read_set_temp(set_temp_file_name)
 
-		if tempAve < (targetTemp - withinAmount): 
+		if tempAve < (targetTemp - withinAmount):
 			#increase temp
 			direction = 0
 			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
