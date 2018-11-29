@@ -5,6 +5,7 @@ import time
 import datetime
 from pathlib import Path
 import RPi.GPIO as GPIO
+import PID
 
 def read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings):
 	""" Read in the temperature and humidity data from the sensor """
@@ -12,13 +13,12 @@ def read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings):
 	pin = 7
 	tempList = []
 	humList = []
-	#Doesn't save the first reading (it seems to be wrong most of the time)
-	for i in range(numPoints+1):
+	for i in range(numPoints):
 		# Try to grab a sensor reading.  Use the read_retry method which will retry up
 		# to 15 times to get a sensor reading (waiting 2 seconds between each retry).
 		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin)
 		#curTime = time.asctime( time.localtime(time.time()) )
-		if i > 0:
+		if humidity < 100.1:
 			tempList.append(temperature)
 			humList.append(humidity)
 		time.sleep(extraTimeBetweenPoints)
@@ -79,21 +79,37 @@ def read_set_temp(set_temp_file_name):
 	setTempFile.closed
 	return setTemp
 
+def control_pid(pid_object, input_cur_temp, set_point_temp):
+	""" Manipulates the pid object """
+	#Errors will be of order 1.  The ranges is ~ -10 to 10.
+	pid_object.SetPoint = set_point_temp
+	
+
 def main():
 	withinAmount = 0.5
-	numPoints = 10
+	numPoints = 20
 	extraTimeBetweenPoints = 1
-	timeBetweenReadings = 60*1
-	readingsBetweenAdjustment = 10
+	timeBetweenReadings = 3 #in seconds
+	readingsBetweenAdjustment = 1
 	filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 	set_temp_file_name = 'set_temp.csv'
 	
 	targetTemp = read_set_temp(set_temp_file_name)
-	curPos = 0.66 #starting position of knob
+	curPos = 0 #starting position of knob
 	setPos = 0 #Amount to turn knob initially
-	direction = 0 #increase temp
+	direction = 0 #0 increases temp, 1 decreases temp
 	curPos, hitExtrema = control_motor(curPos, direction, setPos)
 	FracOfRotToTurn = 0.02 
+
+	#Initiallize a PID object
+	#Errors will be of order 1.  The ranges is ~ -10 to 10.
+	P = 0.01
+	I = 0
+	D = 0
+	pid = PID.PID(P, I, D)
+	pid.windup_guard = 10 #Don't accumulate more than 10 degrees F of error in the integral
+	pid.SetPoint = targetTemp
+	pid.setSampleTime(60)
 
 	while True:
 		for i in range(readingsBetweenAdjustment):
@@ -109,16 +125,31 @@ def main():
 			time.sleep(timeBetweenReadings)
 
 		targetTemp = read_set_temp(set_temp_file_name)
+		pid.SetPoint = targetTemp
+		pid.update(tempAve)
+		fracToChange = pid.output
 
-		if tempAve < (targetTemp - withinAmount):
+		if fracToChange > 0:
 			#increase temp
 			direction = 0
+			FracOfRotToTurn = fracToChange
 			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
 			
-		elif tempAve > (targetTemp + withinAmount):
+		elif fracToChange < 0:
 			#decrease temp
 			direction = 1
+			FracOfRotToTurn = - fracToChange
 			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
+
+		# if tempAve < (targetTemp - withinAmount):
+		# 	#increase temp
+		# 	direction = 0
+		# 	curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
+			
+		# elif tempAve > (targetTemp + withinAmount):
+		# 	#decrease temp
+		# 	direction = 1
+		# 	curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
 
 	# Note that sometimes you won't get a reading and
 	# the results will be null (because Linux can't
