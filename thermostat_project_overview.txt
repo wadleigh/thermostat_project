@@ -12,6 +12,8 @@ Notes:
 	- The command line should read: 
 	"Running this command: rsync -a --delete ./ pi@raspi:~/Dev/thermostat_project/
 	Lauras-MacBook-Pro:thermostat_project laurawadleigh$ ./syncTo.py "
+- to let the computer know a new file is an executable type the she bang thing at the start of the 	new file and type "chmod +x control_temp.py" (with the new file name in the place of control_temp.py)
+	- run it as ./"filename"
 
 
 
@@ -19,20 +21,22 @@ Notes:
 Done:
 - read in temperature 
 - control motor
-
-To do:
 - log temperature
 - set desired temperature 
 - adjust motor accordingly
 - build thing to attach motor to heater
+
+To do:
+- make a schedule of what temperatures it should be at what time
+- adjust the knob in a smarter way.  Maybe set up a PID loop sort of thing.
+- add a motor and thermometer in the bedroom attached to something, maybe the ESP8266 wifi thing, and control the temp in there also with the pi.  This: https://maker.pro/esp8266/tutorial/how-to-program-esp8266s-onboard-gpio-pins could be helpful
 
 
 Extras:
 - log in weather data
 - adjust setting based on weather, not just temperature 
 - figure out a sleep mode so it's not running all the time (an presumably using maybe significant energy)
-- make a schedule of what temperatures it should be at what time
 - figure out how to control it remotely
-- learn how to most efficiently adjust the temperature
-- add a motor and thermometer in the bedroom attached to something, maybe the ESP8266 wifi thing, and control the temp in there also with the pi.  This: https://maker.pro/esp8266/tutorial/how-to-program-esp8266s-onboard-gpio-pins could be helpful
+- learn how to most efficiently adjust the temperature.  Maybe do some machine learning thing.  At least incorporate the outside temperature. 
+
 
