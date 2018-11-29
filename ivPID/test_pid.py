@@ -33,7 +33,7 @@ import time
 #from scipy.interpolate import spline
 #from scipy.interpolate import BSpline, make_interp_spline #  Switched to BSpline
 
-def test_pid(P = 0.2,  I = 0.0, D= 0.0, L=100):
+def test_pid(pid, P = 0.2,  I = 0.0, D= 0.0, L=100):
     """Self-test PID class
 
     .. note::
@@ -48,7 +48,6 @@ def test_pid(P = 0.2,  I = 0.0, D= 0.0, L=100):
             time.sleep(0.02)
         ---
     """
-    pid = PID.PID(P, I, D)
 
     pid.SetPoint=0.0
     pid.setSampleTime(0.01)
@@ -96,5 +95,7 @@ def test_pid(P = 0.2,  I = 0.0, D= 0.0, L=100):
     # plt.show()
 
 if __name__ == "__main__":
-    test_pid(1.2, 1, 0.001, L=50)
+    pid = PID.PID(1.2, 1, 0.001)
+    test_pid(pid, 1.2, 1, 0.001, L=50)
+    print(pid.sample_time)
 #    test_pid(0.8, L=50)
