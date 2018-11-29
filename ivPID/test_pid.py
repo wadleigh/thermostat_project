@@ -28,10 +28,10 @@
 
 import PID
 import time
-import matplotlib.pyplot as plt
-import numpy as np
+#import matplotlib.pyplot as plt
+#import numpy as np
 #from scipy.interpolate import spline
-from scipy.interpolate import BSpline, make_interp_spline #  Switched to BSpline
+#from scipy.interpolate import BSpline, make_interp_spline #  Switched to BSpline
 
 def test_pid(P = 0.2,  I = 0.0, D= 0.0, L=100):
     """Self-test PID class
@@ -73,26 +73,27 @@ def test_pid(P = 0.2,  I = 0.0, D= 0.0, L=100):
         setpoint_list.append(pid.SetPoint)
         time_list.append(i)
 
-    time_sm = np.array(time_list)
-    time_smooth = np.linspace(time_sm.min(), time_sm.max(), 300)
+    print(setpoint_list)    
+    # time_sm = np.array(time_list)
+    # time_smooth = np.linspace(time_sm.min(), time_sm.max(), 300)
 
-    # feedback_smooth = spline(time_list, feedback_list, time_smooth)
-    # Using make_interp_spline to create BSpline
-	helper_x3 = make_interp_spline(time_list, feedback_list)
-    feedback_smooth = helper_x3(time_smooth)
+    # # feedback_smooth = spline(time_list, feedback_list, time_smooth)
+    # # Using make_interp_spline to create BSpline
+    # helper_x3 = make_interp_spline(time_list, feedback_list)
+    # feedback_smooth = helper_x3(time_smooth)
 
-    plt.plot(time_smooth, feedback_smooth)
-    plt.plot(time_list, setpoint_list)
-    plt.xlim((0, L))
-    plt.ylim((min(feedback_list)-0.5, max(feedback_list)+0.5))
-    plt.xlabel('time (s)')
-    plt.ylabel('PID (PV)')
-    plt.title('TEST PID')
+    # plt.plot(time_smooth, feedback_smooth)
+    # plt.plot(time_list, setpoint_list)
+    # plt.xlim((0, L))
+    # plt.ylim((min(feedback_list)-0.5, max(feedback_list)+0.5))
+    # plt.xlabel('time (s)')
+    # plt.ylabel('PID (PV)')
+    # plt.title('TEST PID')
 
-    plt.ylim((1-0.5, 1+0.5))
+    # plt.ylim((1-0.5, 1+0.5))
 
-    plt.grid(True)
-    plt.show()
+    # plt.grid(True)
+    # plt.show()
 
 if __name__ == "__main__":
     test_pid(1.2, 1, 0.001, L=50)
