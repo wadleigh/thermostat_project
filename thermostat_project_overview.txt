@@ -16,8 +16,6 @@ Notes:
 	- run it as ./"filename"
 
 
-
-
 Done:
 - read in temperature 
 - control motor
@@ -34,9 +32,66 @@ To do:
 
 Extras:
 - log in weather data
-- adjust setting based on weather, not just temperature 
+- figure out how to use numPy and/or sciPy or whatever the going tool is (PANDAS?) to make nice plots
+- bring in my electric usage data.  See if I can figure out what I'm saving.  Or if I could save money by switching to the hourly rates program. 
+- adjust setting based on weather, not just indoor temperature 
 - figure out a sleep mode so it's not running all the time (an presumably using maybe significant energy)
 - figure out how to control it remotely
-- learn how to most efficiently adjust the temperature.  Maybe do some machine learning thing.  At least incorporate the outside temperature. 
+	- Maybe use google drive to store the data and schedule.  Rclone (free, command line based) or overGrive ($5, nice GUI) both seem like decent options
+- learn how to most efficiently adjust the temperature.  Maybe do some machine learning thing.  At least incorporate the outside temperature. Maybe include humidity data in setting a comfortable temperature. 
 
 
+Notes and temperature control:
+
+	I was thinking of using a PID loop, at least as a starting point, to control the temperature, but PID loops are symmetric to increases and decreases in the value.  I think the inherently assume the positive and negative response will be the same.  You can set how the loop responds to the error, the integral of the error, and the derivative of the error, but not how it will respond to an error in each direction independently.  Since this is a heater, turning up the heater will increase the temp, but decreasing it will only decrease the temp very slowly.  I guess maybe it would just rail the knob all the way down and wait there until it reaches the desired temp? That might be ok.  But it seems like how quickly to respond to a error above and below the desired value should be different.  Well, it'd probably be better than the slow thing it's doing now... 
+
+	Using a PID loop might be pretty silly for this application.  Mostly I just want the change in the knob to be proportional to the error in the temperature. The differential term is just the error/timestep.  Since the timestep is going to be constant in this application (or nearly so), the differential term will be linearly proportional to the proportional term.  So there's no reason to have both.  No, no, no, that's wrong.  The differential term is proportional to the change in the error, not the error itself. The error will change a lot when (and probably only when) I change the set point.  So by having a high differential gain I could react more quickly to the change in the set point.  Of course, the straight error will also be a lot higher when the set point has recently been changed, but it will stay high, so if the proportional gain is high it will over-react. It would change the knob repeatedly while waiting for the temperature to change. 
+
+	I guess the integral term could be useful to keep the program from overshooting maybe?  I imagine the integral term being pretty high most of the time since the temperature changes much more slowly than I can respond, and I want to log the data pretty often and it'd be convenient to update the loop often too. So the integral term will accumulate a big difference from the set point temperature. I could consider having a negative integral gain.  Then if the temperature had been off for a long time I would change the knob to in the direction that would actually make it more off.  But if the temperature had been off for a long time the other two gains probably would have pushed the knob too far that direction.  Or at least it could be useful to be able to do use that information.  
+
+	Ok, I think it does make sense to at least try the PID loop.  I still wish there was a way to control the reaction to each direction independently.  I'm kind of confused as to while that's not an option on such a commonly used control mechanism. 
+
+	Reasonable PID parameters example
+	set_point_temp = 68
+	actual temp = 66
+	The thing to change (the knob position) ranges from 0 to 0.75.  A reasonable change for that amount is maybe 0.2 .  So if we just use P
+	P * error = P * 2 = 0.1 * 2
+	So maybe P = 0.1 would be a decent starting point.
+	But the error would be basically the same on the next step.  And them change the knob my another 0.1, which would quickly get out of hand.  Maybe it'd be better to make D 0.1.  The change in the error will also be 2, if the temp was at the old set point, so then it would react quickly that, but not keep reacting as the temperature tries to catch up to the new knob position.  
+	So let D = 0.1
+	P should be something smaller and positive.
+	Consider the case where the integral term is railed to 10 (I set the windup term to 10).  Say 
+	set_point_temp = 62
+	actual temp = 68
+	The integral term will rail to 10 really quickly.  Maybe that's too low. Oh well, I'll roll with it for now. the proportional term is 6.  Say the change in the error is negligible and the knob has already been adjusted to close where it needs to be.
+	Then ideally the knob position won't move much.  
+	pgain * 6+ 10 * igain = 0 => pgain * 6 = -10 * igain => pgain/ igain = - 10 /6 
+
+	But having a negative integral gain could cause it to overshot once it got close.  It would definitely overshot because that's the only way to drive the integral back down. Maybe I should be small
+
+	A typical delta error when the set point hasn't changed is probably about 0.1. We need
+	Dgain * Dtypical < Pgain * Ptypical
+	in order to avoid the noise driving the system. Although too high of Pgain would also drive oscillations of the system. Ptypical is maybe 0.5 when close-ish. Maybe Pgain = 0.05 would make sense... 
+	0.1 * 0.1 = 0.01 < 0.05 * 0.5 =0.025
+	I think I want Pgain to be smaller.  It's going to drive the knob way too far while waiting the a response. Having a small negative I maybe be helpful, maybe a higher.
+
+	Let's try D = -0.1
+	P= -0.01
+	I = 0.001
+
+	wait, I need to think through the positve and negatives some more. 
+	self.output = (Kp * PTerm) + (Ki * ITerm) + (Kd * DTerm)
+	error = SetPoint - feedback_value
+
+	set_point_temp = 68
+	actual temp = 66
+	error1 = 66 - 66 = 0
+	error2 = 68 - 66 = 2
+	delta_error = error - last_error
+	delta_error = 2 - 0 = 2
+
+	So D * delta_error = -0.1 * 2 = -0.2 so turn the knob down by 0.2
+	P * error = -0.01 * 2 = -0.02 which turns the knob down a little more
+
+	I don't really know how to think about the integral gain.  Maybe I should just leave it as zero.  It'd be hard to set it by the standard adjustment method because the response is so slow. 
+	I think I will usually be railed.  Maybe just leave it at zero for now.
