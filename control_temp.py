@@ -104,11 +104,11 @@ def main():
 
 	#Initiallize a PID object
 	#Errors will be of order 1.  The ranges is ~ -10 to 10.
-	P = 0.01
-	I = 0
-	D = 0
+	P = 0.02
+	I = 0.0001
+	D = 0.01
 	pid = PID.PID(P, I, D)
-	pid.windup_guard = 10 #Don't accumulate more than 10 degrees F of error in the integral
+	pid.windup_guard = 20 #Don't accumulate more than 10 degrees F of error in the integral
 	pid.SetPoint = targetTemp
 	pid.setSampleTime(60)
 
