@@ -90,7 +90,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 
 	stepsInRot = 200
 	numSteps = int(round(stepsInRot * FracOfRotToTurn))
-	fractionTurned = numSteps * stepsInRot
+	fractionTurned = numSteps / stepsInRot
 	newPos = fractionTurned * signOfDirection + curPos
 
 	timeStep = 0.001
