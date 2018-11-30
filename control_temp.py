@@ -27,6 +27,35 @@ def read_temp(numPoints, extraTimeBetweenPoints, timeBetweenReadings, pin):
 	humAve = sum(humList) / len(humList)
 	return tempAve, humAve
 
+def read_2_temps(numPoints, extraTimeBetweenPoints, timeBetweenReadings, pin1, pin2):
+	""" Read in the temperature and humidity data from the sensor """
+	sensor = Adafruit_DHT.DHT22
+	tempList = []
+	humList = []
+	temp2List = []
+	hum2List = []
+	for i in range(numPoints):
+		# Try to grab a sensor reading.  Use the read_retry method which will retry up
+		# to 15 times to get a sensor reading (waiting 2 seconds between each retry).
+		humidity, temperature = Adafruit_DHT.read_retry(sensor, pin1)
+		humidity2, temperature2 = Adafruit_DHT.read_retry(sensor, pin2)
+		#curTime = time.asctime( time.localtime(time.time()) )
+		if humidity < 100.1:
+			tempList.append(temperature)
+			humList.append(humidity)
+		if humidity2 < 100.1:
+			temp2List.append(temperature2)
+			hum2List.append(humidity2)
+		time.sleep(extraTimeBetweenPoints)
+
+	# Convert the temperature to Fahrenheit.
+	tempAve = sum(tempList) / len(tempList)  * 9/5.0 + 32
+	humAve = sum(humList) / len(humList)
+	temp2Ave = sum(temp2List) / len(temp2List)  * 9/5.0 + 32
+	hum2Ave = sum(hum2List) / len(hum2List)
+	return tempAve, humAve, temp2Ave, hum2Ave
+
+
 
 def control_motor(curPos, direction, FracOfRotToTurn):
 	""" Control the motor.  Assume the position starts at "curPos". """
@@ -108,7 +137,7 @@ def main():
 	I = 0.0001
 	D = 0.01
 	pid = PID.PID(P, I, D)
-	pid.windup_guard = 20 #Don't accumulate more than 10 degrees F of error in the integral
+	pid.windup_guard = 20 #Don't accumulate more that this amount of error in degrees F in the integral
 	pid.SetPoint = targetTemp
 	pid.setSampleTime(60)
 
@@ -116,8 +145,7 @@ def main():
 	pinBR = 25
 	while True:
 		for i in range(readingsBetweenAdjustment):
-			tempAve, humAve = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings, pin1)
-			tempAveBR, humAveBR = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings, pinBR)
+			tempAve, humAve, tempAveBR, humAveBR = read_2_temps(numPoints,extraTimeBetweenPoints,timeBetweenReadings, pin1, pinBR)
 			curTime = datetime.datetime.now()
 			lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.3f}, {2:0.2f}, {3:0.2f}, {4:0.2f}, {5:0.2f}, {6:0.2f} \n'.format(curTime, curPos, targetTemp, tempAve, humAve, tempAveBR, humAveBR)
 
