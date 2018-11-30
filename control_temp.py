@@ -61,6 +61,8 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 
 	stepsInRot = 200
 	numSteps = int(round(stepsInRot * FracOfRotToTurn))
+	fractionTurned = numSteps * stepsInRot
+	newPos = fractionTurned * signOfDirection + curPos
 
 	timeStep = 0.001
 	for i in range(numSteps):
@@ -69,7 +71,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	  GPIO.output(stepPin, 0)
 	  time.sleep(timeStep)
 	GPIO.cleanup()
-	return targetPos, hitExtrema
+	return newPos, hitExtrema
 
 def read_set_temp(set_temp_file_name):
 	""" read the set point tempurature in from a file """
