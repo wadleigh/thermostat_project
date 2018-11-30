@@ -7,10 +7,9 @@ from pathlib import Path
 import RPi.GPIO as GPIO
 import PID
 
-def read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings):
+def read_temp(numPoints, extraTimeBetweenPoints, timeBetweenReadings, pin):
 	""" Read in the temperature and humidity data from the sensor """
 	sensor = Adafruit_DHT.DHT22
-	pin = 7
 	tempList = []
 	humList = []
 	for i in range(numPoints):
@@ -111,11 +110,14 @@ def main():
 	pid.SetPoint = targetTemp
 	pid.setSampleTime(60)
 
+	pin1 = 7
+	pinBR = 25
 	while True:
 		for i in range(readingsBetweenAdjustment):
-			tempAve, humAve = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings)
+			tempAve, humAve = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings, pin1)
+			tempAveBR, humAveBR = read_temp(numPoints,extraTimeBetweenPoints,timeBetweenReadings, pinBR)
 			curTime = datetime.datetime.now()
-			lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f}, {3:0.2f}, {4:0.2f} \n'.format(curTime, tempAve, humAve, curPos, targetTemp)
+			lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.3f}, {2:0.2f}, {3:0.2f}, {4:0.2f}, {5:0.2f}, {6:0.2f} \n'.format(curTime, curPos, targetTemp, tempAve, humAve, tempAveBR, humAveBR)
 
 			with filename.open(mode = 'a') as log:
 				log.write(lineToWrite)
