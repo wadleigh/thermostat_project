@@ -93,7 +93,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	  targetPos = minPos
 
 	FracOfRotToTurn = (targetPos - curPos) / signOfDirection 
-	numSteps = stepsInRot * FracOfRotToTurn
+	numSteps = int(stepsInRot * FracOfRotToTurn)
 	targetPos = curPos + FracOfRotToTurn * signOfDirection
 
 	timeStep = 0.001
