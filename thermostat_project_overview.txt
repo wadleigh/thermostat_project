@@ -14,6 +14,7 @@ Notes:
 	Lauras-MacBook-Pro:thermostat_project laurawadleigh$ ./syncTo.py "
 - to let the computer know a new file is an executable type the she bang thing at the start of the 	new file and type "chmod +x control_temp.py" (with the new file name in the place of control_temp.py)
 	- run it as ./"filename"
+- I need to figure out a mechanical way for the program to know when the heater is all the way off.  After running it for a day I noticed the knob was a little bit on when it thought it was off.
 
 
 Done:
