@@ -76,12 +76,12 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 
 	#Round the fraction to turn to the nearest step
 	stepsInRot = 200
-	FracOfRotToTurn = int(round(stepsInRot * FracOfRotToTurn)) / stepsInRot
+	FracOfRotToTurn = round(stepsInRot * FracOfRotToTurn) / stepsInRot
 
 	maxPos = 0.75 #It can actually go a little past 0.75 turns, so this is conservative
 	minPos = 0
-	maxPos = int(round(stepsInRot * maxPos))/ stepsInRot
-	minPos = int(round(stepsInRot * minPos))/ stepsInRot
+	maxPos = round(stepsInRot * maxPos)/ stepsInRot
+	minPos = round(stepsInRot * minPos)/ stepsInRot
 	hitExtrema = 0
 
 	targetPos = curPos + signOfDirection * FracOfRotToTurn
@@ -96,7 +96,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	numSteps = int(stepsInRot * FracOfRotToTurn)
 	targetPos = curPos + FracOfRotToTurn * signOfDirection
 
-	timeStep = 0.001
+	timeStep = 0.005
 	for i in range(numSteps):
 	  GPIO.output(stepPin, 1)
 	  time.sleep(timeStep)
@@ -132,7 +132,6 @@ def main():
 	setPos = 0 #Amount to turn knob initially
 	direction = 0 #0 increases temp, 1 decreases temp
 	curPos, hitExtrema = control_motor(curPos, direction, setPos)
-	FracOfRotToTurn = 0.02 
 
 	#Initiallize a PID object
 	#Errors will be of order 1.  The ranges is ~ -10 to 10.
