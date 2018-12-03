@@ -15,6 +15,8 @@ Notes:
 - to let the computer know a new file is an executable type the she bang thing at the start of the 	new file and type "chmod +x control_temp.py" (with the new file name in the place of control_temp.py)
 	- run it as ./"filename"
 - I need to figure out a mechanical way for the program to know when the heater is all the way off.  After running it for a day I noticed the knob was a little bit on when it thought it was off.
+	- my best guess right now for why that is happening is that the motor is missing some of the steps.  I changed the time of each step to be longer, which might help?
+	- although it seems like having the knob not quite all the way down doesn't really matter.  Turning it down the rest of the way hasn't changed the behavior of the temperature. Maybe the heat is just off for knob positions within some amount of zero.
 
 
 Done:
