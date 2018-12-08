@@ -26,10 +26,11 @@ Done:
 - set desired temperature 
 - adjust motor accordingly
 - build thing to attach motor to heater
+- adjust the knob in a smarter way.  Maybe set up a PID loop sort of thing.
 
 To do:
 - make a schedule of what temperatures it should be at what time
-- adjust the knob in a smarter way.  Maybe set up a PID loop sort of thing.
+- make a mechanical way for it to know when it's reached the end points and/or figure out how to keep it from drift off from the knob position I think it's at.
 - add a motor and thermometer in the bedroom attached to something, maybe the ESP8266 wifi thing, and control the temp in there also with the pi.  This: https://maker.pro/esp8266/tutorial/how-to-program-esp8266s-onboard-gpio-pins could be helpful
 
 
