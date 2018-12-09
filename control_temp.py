@@ -6,6 +6,7 @@ import datetime
 from pathlib import Path
 import RPi.GPIO as GPIO
 import PID
+import pandas
 
 def read_temp(numPoints, extraTimeBetweenPoints, timeBetweenReadings, pin):
 	""" Read in the temperature and humidity data from the sensor """
@@ -105,6 +106,15 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	GPIO.cleanup()
 	return targetPos, hitExtrema
 
+def find_set_point_temp_for_now():
+	file_name = "schedule_of_temps.csv"
+	data_frame = pandas.read_csv(file_name)
+
+	curTime = datetime.datetime.now()
+	hour = curTime.hour
+	weekdaystring = curTime.strftime('%A') 
+	return data_frame.loc[hour, weekdaystring]
+
 def read_set_temp(set_temp_file_name):
 	""" read the set point tempurature in from a file """
 	with open('set_temp.csv') as setTempFile:
@@ -127,7 +137,7 @@ def main():
 	filename = Path("/home/pi/Data/temp_hum_log.csv")#.expanduser()
 	set_temp_file_name = 'set_temp.csv'
 	
-	targetTemp = read_set_temp(set_temp_file_name)
+	targetTemp = find_set_point_temp_for_now()
 	curPos = 0 #starting position of knob
 	setPos = 0 #Amount to turn knob initially
 	direction = 0 #0 increases temp, 1 decreases temp
