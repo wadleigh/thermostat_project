@@ -97,7 +97,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	numSteps = int(stepsInRot * FracOfRotToTurn)
 	targetPos = curPos + FracOfRotToTurn * signOfDirection
 
-	timeStep = 0.005
+	timeStep = 0.02
 	for i in range(numSteps):
 	  GPIO.output(stepPin, 1)
 	  time.sleep(timeStep)
@@ -147,7 +147,7 @@ def main():
 	#Errors will be of order 1.  The ranges is ~ -10 to 10.
 	P = 0.01
 	I = 0.0
-	D = 0.04
+	D = 0.06
 	pid = PID.PID(P, I, D)
 	pid.windup_guard = 20 #Don't accumulate more that this amount of error in degrees F in the integral
 	pid.SetPoint = targetTemp
@@ -168,7 +168,7 @@ def main():
 
 			time.sleep(timeBetweenReadings)
 
-		targetTemp = read_set_temp(set_temp_file_name)
+		targetTemp = find_set_point_temp_for_now()
 		pid.SetPoint = targetTemp
 		pid.update(tempAve)
 		fracToChange = pid.output
