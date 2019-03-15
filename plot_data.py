@@ -17,6 +17,7 @@ def main():
 	data_frame['date time'] = pd.to_datetime(data_frame['date time'])
 	#plt.plot(data_frame.loc[:,'date time'],data_frame.loc[:,'br temp'],data_frame.loc[:,'date time'],data_frame.loc[:,'br hum'])
 	#plt.plot(data_frame.loc[:,'date time'],data_frame.loc[:,'lr temp'],data_frame.loc[:,'date time'],data_frame.loc[:,'lr hum'])
+	#plt.plot(data_frame.loc[:,'date time'],data_frame.loc[:,'br hum'],data_frame.loc[:,'date time'],data_frame.loc[:,'lr hum'])
 	plt.plot(data_frame.loc[:,'date time'],data_frame.loc[:,'br temp'],data_frame.loc[:,'date time'],data_frame.loc[:,'lr temp'])
 	#plt.plot(data_frame.loc[100:,'date time'],data_frame.loc[100:,'knob position'])
 	plt.show()
