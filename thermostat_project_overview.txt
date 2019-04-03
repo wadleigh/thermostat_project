@@ -17,6 +17,8 @@ Notes:
 - I need to figure out a mechanical way for the program to know when the heater is all the way off.  After running it for a day I noticed the knob was a little bit on when it thought it was off.
 	- my best guess right now for why that is happening is that the motor is missing some of the steps.  I changed the time of each step to be longer, which might help?
 	- although it seems like having the knob not quite all the way down doesn't really matter.  Turning it down the rest of the way hasn't changed the behavior of the temperature. Maybe the heat is just off for knob positions within some amount of zero.
+- this website: https://techtutorialsx.com/2016/10/30/esp8266-webserver-receiving-get-requests-from-python/ has a nice 		explination of how to send data from an ESP8622 to python
+- set the date and time: sudo date -s '2019-03-10 13:28:00'
 
 
 Done:
@@ -27,11 +29,14 @@ Done:
 - adjust motor accordingly
 - build thing to attach motor to heater
 - adjust the knob in a smarter way.  Maybe set up a PID loop sort of thing.
+- make a schedule of what temperatures it should be at what time
+
 
 To do:
-- make a schedule of what temperatures it should be at what time
-- make a mechanical way for it to know when it's reached the end points and/or figure out how to keep it from drift off from the knob position I think it's at.
+- make a mechanical way for it to know when it's reached the end points and/or figure out how to keep it from drift off from the knob position I think it's at.  Calibrate to that occasionally.
 - add a motor and thermometer in the bedroom attached to something, maybe the ESP8266 wifi thing, and control the temp in there also with the pi.  This: https://maker.pro/esp8266/tutorial/how-to-program-esp8266s-onboard-gpio-pins could be helpful
+- Read in the knob position when starting the program
+- figur eout how to automatically start program on pi startup so it could handle the power going out.
 
 
 Extras:
