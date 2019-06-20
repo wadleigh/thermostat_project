@@ -72,7 +72,7 @@ def main():
 	while True:
 		tempAve, humAve, tempAveBR, humAveBR = read_2_temps(numPoints,extraTimeBetweenPoints,timeBetweenReadings, pin1, pinBR)
 		curTime = datetime.datetime.now()
-		lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.3f}, {2:0.2f}, {3:0.2f}, {4:0.2f}, {5:0.2f}, {6:0.2f} \n'.format(curTime, tempAve, humAve, tempAveBR, humAveBR)
+		lineToWrite = '{0:%Y-%m-%d %H:%M:%S}, {1:0.2f}, {2:0.2f}, {3:0.2f}, {4:0.2f} \n'.format(curTime, tempAve, humAve, tempAveBR, humAveBR)
 
 		with filename.open(mode = 'a') as log:
 			log.write(lineToWrite)

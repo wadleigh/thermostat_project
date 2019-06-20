@@ -13,7 +13,7 @@ def get_data_csv(file_name):
 	return data_frame
 
 def main():
-	data_frame = get_data_csv('/Users/laurawadleigh/Dev/thermostat_data/temp_hum_log.csv')
+	data_frame = get_data_csv('/Users/laurawadleigh/Dev/thermostat_data/temp_hum_log_summer.csv')
 	data_frame['date time'] = pd.to_datetime(data_frame['date time'])
 	#plt.plot(data_frame.loc[:,'date time'],data_frame.loc[:,'br temp'],data_frame.loc[:,'date time'],data_frame.loc[:,'br hum'])
 	#plt.plot(data_frame.loc[:,'date time'],data_frame.loc[:,'lr temp'],data_frame.loc[:,'date time'],data_frame.loc[:,'lr hum'])
