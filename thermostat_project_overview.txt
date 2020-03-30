@@ -12,13 +12,16 @@ Notes:
 	- The command line should read: 
 	"Running this command: rsync -a --delete ./ pi@raspi:~/Dev/thermostat_project/
 	Lauras-MacBook-Pro:thermostat_project laurawadleigh$ ./syncTo.py "
-- to let the computer know a new file is an executable type the she bang thing at the start of the 	new file and type "chmod +x control_temp.py" (with the new file name in the place of control_temp.py)
+- to let the computer know a new file is an executable type the she bang thing (#!/usr/bin/env python3) at the start of the 	new file and type "chmod +x control_temp.py" (with the new file name in the place of control_temp.py)
 	- run it as ./"filename"
 - I need to figure out a mechanical way for the program to know when the heater is all the way off.  After running it for a day I noticed the knob was a little bit on when it thought it was off.
 	- my best guess right now for why that is happening is that the motor is missing some of the steps.  I changed the time of each step to be longer, which might help?
 	- although it seems like having the knob not quite all the way down doesn't really matter.  Turning it down the rest of the way hasn't changed the behavior of the temperature. Maybe the heat is just off for knob positions within some amount of zero.
 - this website: https://techtutorialsx.com/2016/10/30/esp8266-webserver-receiving-get-requests-from-python/ has a nice 		explination of how to send data from an ESP8622 to python
 - set the date and time: sudo date -s '2019-03-10 13:28:00'
+ 	-New solution: type 'sudo sntp -s time.google.com'
+-in main directory, thermostatvis contains server.js which should be run "sudo nohup ./src/server.js" to start the server (but actually just look at the read me)
+-mosquitto_sub -d -u laura -P blueberry -t test connects to the mosquitto server on the pi.  
 
 
 Done:
