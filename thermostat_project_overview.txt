@@ -22,6 +22,7 @@ Notes:
  	-New solution: type 'sudo sntp -s time.google.com'
 -in main directory, thermostatvis contains server.js which should be run "sudo nohup ./src/server.js" to start the server (but actually just look at the read me)
 -mosquitto_sub -d -u laura -P blueberry -t test connects to the mosquitto server on the pi.  
+	- Motor driver circuit diagram: https://www.pololu.com/product/1182
 
 
 Done:
