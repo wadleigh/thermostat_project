@@ -134,7 +134,7 @@ def main():
 	extraTimeBetweenPoints = 1
 	timeBetweenReadings = 3 #in seconds
 	readingsBetweenAdjustment = 1
-	filename = Path("/home/pi/Data/temp_hum_log_spring_2020.csv")#.expanduser()
+	filename = Path("/home/pi/Data/temp_hum_log_summer_2020.csv")#.expanduser()
 	set_temp_file_name = 'set_temp.csv'
 	
 	targetTemp = find_set_point_temp_for_now()
