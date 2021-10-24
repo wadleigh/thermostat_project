@@ -58,12 +58,18 @@ def read_2_temps(numPoints, extraTimeBetweenPoints, timeBetweenReadings, pin1, p
 
 
 
-def control_motor(curPos, direction, FracOfRotToTurn):
+def control_motor(curPos, FracOfRotToTurn):
 	""" Control the motor.  Assume the position starts at "curPos". """
 	#variables to determine rotation
 	#1 clockwise, 0 counterclockwise (when looking at motor, dial on heater is reversed)
 	# zero turns up temp, 1 turns down temp
-	signOfDirection = 1 - direction * 2
+	if FracOfRotToTurn >= 0:
+		#increase temp
+		direction = 0
+		
+	elif FracOfRotToTurn < 0:
+		#decrease temp
+		direction = 1
 
 	#pin number (not GPIO number)
 	stepPin = 31
@@ -85,7 +91,7 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	minPos = round(stepsInRot * minPos)/ stepsInRot
 	hitExtrema = 0
 
-	targetPos = curPos + signOfDirection * FracOfRotToTurn
+	targetPos = curPos + FracOfRotToTurn
 	if targetPos > maxPos:
 	  hitExtrema = 1
 	  targetPos = maxPos
@@ -93,9 +99,9 @@ def control_motor(curPos, direction, FracOfRotToTurn):
 	  hitExtrema = 1
 	  targetPos = minPos
 
-	FracOfRotToTurn = (targetPos - curPos) / signOfDirection 
-	numSteps = int(stepsInRot * FracOfRotToTurn)
-	targetPos = curPos + FracOfRotToTurn * signOfDirection
+	FracOfRotToTurn = targetPos - curPos 
+	numSteps = abs(int(stepsInRot * FracOfRotToTurn))
+	targetPos = curPos + FracOfRotToTurn
 
 	timeStep = 0.02
 	for i in range(numSteps):
@@ -173,27 +179,9 @@ def main():
 		pid.update(tempAve)
 		fracToChange = pid.output
 
-		if fracToChange > 0:
-			#increase temp
-			direction = 0
-			FracOfRotToTurn = fracToChange
-			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
-			
-		elif fracToChange < 0:
-			#decrease temp
-			direction = 1
-			FracOfRotToTurn = - fracToChange
-			curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
+		curPos, hitExtrema = control_motor(curPos, fracToChange)
 
-		# if tempAve < (targetTemp - withinAmount):
-		# 	#increase temp
-		# 	direction = 0
-		# 	curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
-			
-		# elif tempAve > (targetTemp + withinAmount):
-		# 	#decrease temp
-		# 	direction = 1
-		# 	curPos, hitExtrema = control_motor(curPos, direction, FracOfRotToTurn)
+
 
 	# Note that sometimes you won't get a reading and
 	# the results will be null (because Linux can't
