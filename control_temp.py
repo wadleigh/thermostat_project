@@ -100,8 +100,7 @@ def control_motor(curPos, FracOfRotToTurn):
 	  targetPos = minPos
 
 	FracOfRotToTurn = targetPos - curPos 
-	numSteps = abs(int(stepsInRot * FracOfRotToTurn))
-	targetPos = curPos + FracOfRotToTurn
+	numSteps = int(abs(round(stepsInRot * FracOfRotToTurn)))
 
 	timeStep = 0.02
 	for i in range(numSteps):
