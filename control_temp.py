@@ -83,15 +83,15 @@ def control_motor(curPos, FracOfRotToTurn):
 
 	#Round the fraction to turn to the nearest step
 	stepsInRot = 200
-	FracOfRotToTurn = round(stepsInRot * FracOfRotToTurn) / stepsInRot
+	stepsToTurn = round(stepsInRot * FracOfRotToTurn)
 
 	maxPos = 0.75 #It can actually go a little past 0.75 turns, so this is conservative
 	minPos = 0
-	maxPos = round(stepsInRot * maxPos)/ stepsInRot
-	minPos = round(stepsInRot * minPos)/ stepsInRot
+	maxPos = round(stepsInRot * maxPos)
+	minPos = round(stepsInRot * minPos)
 	hitExtrema = 0
 
-	targetPos = curPos + FracOfRotToTurn
+	targetPos = curPos + stepsToTurn
 	if targetPos > maxPos:
 	  hitExtrema = 1
 	  targetPos = maxPos
@@ -99,8 +99,8 @@ def control_motor(curPos, FracOfRotToTurn):
 	  hitExtrema = 1
 	  targetPos = minPos
 
-	FracOfRotToTurn = targetPos - curPos 
-	numSteps = int(abs(round(stepsInRot * FracOfRotToTurn)))
+	stepsToTurn = targetPos - curPos 
+	numSteps = abs(stepsToTurn)
 
 	timeStep = 0.02
 	for i in range(numSteps):
