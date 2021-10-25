@@ -144,9 +144,8 @@ def main():
 	
 	targetTemp = find_set_point_temp_for_now()
 	curPos = 0 #starting position of knob
-	setPos = 0 #Amount to turn knob initially
-	direction = 0 #0 increases temp, 1 decreases temp
-	curPos, hitExtrema = control_motor(curPos, direction, setPos)
+	setPos = 0 #Amount to turn knob initially, can be positive or negative #0 increases temp, 1 decreases temp
+	curPos, hitExtrema = control_motor(curPos, setPos)
 
 	#Initiallize a PID object
 	#Errors will be of order 1.  The ranges is ~ -10 to 10.
